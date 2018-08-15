@@ -7,7 +7,7 @@
   		<foldername>DnnForge - Child Links</foldername>
   		<modulename>DnnForge - Child Links</modulename>
 			<description>Allows you to display child links for a given tab.</description>
-			<version>01.06.02</version>
+			<version>01.06.03</version>
 			<businesscontrollerclass>DnnForge.ChildLinks.Entities.LinkController, DnnForge.ChildLinks</businesscontrollerclass>
 			<resourcefile>Resources.zip</resourcefile>
 			<modules>

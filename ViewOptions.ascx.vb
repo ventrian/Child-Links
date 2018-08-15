@@ -89,7 +89,8 @@ Namespace DnnForge.ChildLinks
 
         Private Sub BindTabs()
 
-            drpTab.DataSource = GetPortalTabs(PortalSettings.DesktopTabs, -1, True, True, False, True, True)
+            drpTab.DataSource = TabController.GetPortalTabs(PortalId, -1, True, "None", True, False, True, True, False)
+            'drpTab.DataSource = GetPortalTabs(PortalSettings.DesktopTabs, -1, True, True, False, True, True)
             drpTab.DataBind()
 
         End Sub

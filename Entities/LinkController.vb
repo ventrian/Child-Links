@@ -1,6 +1,7 @@
 Imports System.Xml
 
 Imports DotNetNuke.Common
+Imports DotNetNuke.Common.Utilities
 Imports DotNetNuke.Entities.Modules
 
 Namespace DnnForge.ChildLinks.Entities
@@ -14,8 +15,7 @@ Namespace DnnForge.ChildLinks.Entities
 
             Dim strXML As String = ""
 
-            Dim objModuleController As New ModuleController
-            Dim objSettings As Hashtable = objModuleController.GetModuleSettings(ModuleID)
+            Dim objSettings As Hashtable = ModuleController.Instance.GetModule(ModuleID, Null.NullInteger, True).ModuleSettings
 
             strXML += "<settings>"
             Dim settings As IDictionaryEnumerator = objSettings.GetEnumerator
