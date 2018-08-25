@@ -19,6 +19,8 @@ Imports DotNetNuke.Services.Localization
 
 Imports DnnForge.ChildLinks.Common
 Imports DnnForge.ChildLinks.Entities
+Imports DotNetNuke.Application
+Imports DotNetNuke.Security.Permissions
 
 Namespace DnnForge.ChildLinks
 
@@ -135,13 +137,12 @@ Namespace DnnForge.ChildLinks
             Dim objTabsFiltered As New ArrayList
             If (parentID <> Null.NullInteger) Then
 
-                Dim objTabController As TabController = New TabController
-                Dim objTabs As ArrayList = objTabController.GetTabsByParentId(parentID, PortalId)
+                Dim objTabs As List(Of TabInfo) = TabController.GetTabsByParent(parentID, PortalId)
 
                 For Each objTab As TabInfo In objTabs
                     If ((objTab.IsVisible Or SettingController.ShowHiddenPages(Me.Settings)) And ((Not objTab.DisableLink) Or SettingController.ShowDisabledPages(Me.Settings)) And Not objTab.IsDeleted) Then
                         If ((objTab.StartDate < Now Or objTab.StartDate = Null.NullDate) And (objTab.EndDate > Now Or objTab.EndDate = Null.NullDate)) Or AdminMode = True Then
-                            If PortalSecurity.IsInRoles(objTab.AuthorizedRoles) = True Then
+                            If TabPermissionController.CanViewPage(objTab) = True Then
                                 objTabsFiltered.Add(objTab)
                             End If
                         End If
@@ -151,15 +152,13 @@ Namespace DnnForge.ChildLinks
 
             Else
 
-                Dim objTabController As TabController = New TabController
+                Dim objTabs As TabCollection = TabController.Instance.GetTabsByPortal(Me.PortalId)
 
-                Dim objTabs As ArrayList = objTabController.GetTabs(Me.PortalId)
-
-                For Each objTab As TabInfo In objTabs
+                For Each objTab As TabInfo In objTabs.Values
                     If (objTab.ParentId = -1) Then
                         If ((objTab.IsVisible Or SettingController.ShowHiddenPages(Me.Settings)) And ((Not objTab.DisableLink) Or SettingController.ShowDisabledPages(Me.Settings)) And Not objTab.IsDeleted) Then
                             If ((objTab.StartDate < Now Or objTab.StartDate = Null.NullDate) And (objTab.EndDate > Now Or objTab.EndDate = Null.NullDate)) Or AdminMode = True Then
-                                If PortalSecurity.IsInRoles(objTab.AuthorizedRoles) = True Then
+                                If TabPermissionController.CanViewPage(objTab) = True Then
                                     objTabsFiltered.Add(objTab)
                                 End If
                             End If
@@ -299,19 +298,7 @@ Namespace DnnForge.ChildLinks
                                 If (objTab.IconFile.StartsWith("~")) Then
                                     icon = "<img src=""" & Page.ResolveUrl(objTab.IconFile()) & """ alt=""" & Localization.GetString("PageIcon", Me.LocalResourceFile) & """ border=""0"" />"
                                 Else
-                                    Dim isDnn6 As Boolean = False
-                                    Try
-                                        If (Convert.ToInt32(PortalSettings.Version.Split("."c)(0)) >= 6) Then
-                                            isDnn6 = True
-                                        End If
-                                    Catch
-                                    End Try
-
-                                    If (isDnn6) Then
-                                        icon = "<img src=""" & objTab.IconFile() & """ alt=""" & Localization.GetString("PageIcon", Me.LocalResourceFile) & """ border=""0"" />"
-                                    Else
-                                        icon = "<img src=""" & Me.PortalSettings.HomeDirectory & objTab.IconFile() & """ alt=""" & Localization.GetString("PageIcon", Me.LocalResourceFile) & """ border=""0"" />"
-                                    End If
+                                    icon = "<img src=""" & objTab.IconFile() & """ alt=""" & Localization.GetString("PageIcon", Me.LocalResourceFile) & """ border=""0"" />"
                                 End If
 
                                 Dim objLiteral As New Literal
@@ -443,7 +430,7 @@ Namespace DnnForge.ChildLinks
 
         Private ReadOnly Property AdminMode() As Boolean
             Get
-                Return PortalSecurity.IsInRoles(PortalSettings.AdministratorRoleName) Or PortalSecurity.IsInRoles(PortalSettings.ActiveTab.AdministratorRoles.ToString)
+                Return PortalSecurity.IsInRoles(PortalSettings.AdministratorRoleName) Or PortalSecurity.IsInRoles(TabPermissionController.CanAdminPage(PortalSettings.ActiveTab))
             End Get
         End Property
 

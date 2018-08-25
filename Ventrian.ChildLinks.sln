@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DnnForge.ChildLinks", "DnnForge.ChildLinks.vbproj", "{75B44AC1-2F17-41C7-AE19-16A8FDEBC3AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{75B44AC1-2F17-41C7-AE19-16A8FDEBC3AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75B44AC1-2F17-41C7-AE19-16A8FDEBC3AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75B44AC1-2F17-41C7-AE19-16A8FDEBC3AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75B44AC1-2F17-41C7-AE19-16A8FDEBC3AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6977400C-F04D-451B-A5D1-E362503F72C2}
+	EndGlobalSection
+EndGlobal
